@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 600 14px system-ui, -apple-system, sans-serif; color: #fff; background: #10121f; }
+    .camera { position: relative; width: 100%; overflow: hidden; border-radius: 16px; background: #090b13; }
+    video { display: block; width: 100%; max-height: 68vh; min-height: 280px; object-fit: cover; }
+    .guide { position: absolute; inset: 14% 8% 25%; border: 2px dashed rgba(255,255,255,.88); border-radius: 14px; pointer-events: none; box-shadow: 0 0 0 999px rgba(0,0,0,.12); }
+    .guide span { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); width: max-content; max-width: 92%; padding: 6px 10px; border-radius: 99px; background: rgba(0,0,0,.66); font-size: 12px; text-align: center; }
+    .toolbar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: 18px; padding: 16px; background: linear-gradient(transparent,rgba(0,0,0,.82)); }
+    button { display: grid; place-items: center; min-width: 48px; min-height: 48px; padding: 0 14px; border: 1px solid rgba(255,255,255,.7); border-radius: 999px; color: #fff; background: rgba(16,18,31,.76); font: inherit; cursor: pointer; }
+    button:disabled { opacity: .4; }
+    #shutter { width: 66px; height: 66px; padding: 5px; border: 4px solid #fff; background: transparent; }
+    #shutter::after { content: ""; width: 100%; height: 100%; border-radius: 50%; background: #fff; }
+    #status { padding: 14px; color: #fff; background: #311b3f; line-height: 1.45; }
+    canvas { display: none; }
+  </style>
+</head>
+<body>
+  <div class="camera">
+    <video id="video" autoplay playsinline muted></video>
+    <div class="guide"><span>Kâğıt kenarlarını kesikli alanın dışında bırak</span></div>
+    <div class="toolbar">
+      <button id="switch" title="Kamerayı değiştir">↻</button>
+      <button id="shutter" title="Fotoğraf çek" aria-label="Fotoğraf çek"></button>
+      <button id="torch" title="Fener" hidden>⚡</button>
+    </div>
+  </div>
+  <div id="status" hidden></div>
+  <canvas id="canvas"></canvas>
+  <input id="native-capture" type="file" accept="image/*" capture="environment" hidden />
+  <script>
+    const Streamlit = {
+      ready() { parent.postMessage({isStreamlitMessage:true,type:"streamlit:componentReady",apiVersion:1}, "*"); },
+      height() { parent.postMessage({isStreamlitMessage:true,type:"streamlit:setFrameHeight",height:document.body.scrollHeight}, "*"); },
+      value(value) { parent.postMessage({isStreamlitMessage:true,type:"streamlit:setComponentValue",value}, "*"); }
+    };
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const status = document.getElementById("status");
+    const torchButton = document.getElementById("torch");
+    const shutterButton = document.getElementById("shutter");
+    const nativeCapture = document.getElementById("native-capture");
+    let stream = null;
+    let facingMode = "environment";
+    let torchOn = false;
+    const useNativeMobileCamera = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    function showError(message) {
+      status.hidden = false;
+      status.textContent = message;
+      Streamlit.height();
+    }
+
+    async function stopCamera() {
+      if (stream) stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
+
+    async function startCamera() {
+      try {
+        await stopCamera();
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 } }
+        });
+        video.srcObject = stream;
+        await video.play();
+        status.hidden = true;
+        const track = stream.getVideoTracks()[0];
+        const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+        torchButton.hidden = !capabilities.torch;
+        torchOn = false;
+        Streamlit.height();
+      } catch (error) {
+        showError("Kamera açılamadı. Tarayıcı kamera iznini kontrol et ve HTTPS adresini kullandığından emin ol.");
+      }
+    }
+
+    document.getElementById("switch").onclick = async () => {
+      facingMode = facingMode === "environment" ? "user" : "environment";
+      await startCamera();
+    };
+
+    torchButton.onclick = async () => {
+      const track = stream && stream.getVideoTracks()[0];
+      if (!track) return;
+      try {
+        torchOn = !torchOn;
+        await track.applyConstraints({advanced: [{torch: torchOn}]});
+        torchButton.style.background = torchOn ? "#6d5dfc" : "rgba(16,18,31,.76)";
+      } catch (_) { torchOn = false; }
+    };
+
+    function captureVideoFrame() {
+      if (!video.videoWidth || !video.videoHeight) return;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+      Streamlit.value(canvas.toDataURL("image/jpeg", 0.94));
+    }
+
+    nativeCapture.addEventListener("change", () => {
+      const file = nativeCapture.files && nativeCapture.files[0];
+      if (!file) return;
+
+      shutterButton.disabled = true;
+      const reader = new FileReader();
+      reader.onload = () => {
+        Streamlit.value(reader.result);
+        shutterButton.disabled = false;
+        nativeCapture.value = "";
+      };
+      reader.onerror = () => {
+        showError("Fotoğraf okunamadı. Lütfen yeniden çek.");
+        shutterButton.disabled = false;
+        nativeCapture.value = "";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    shutterButton.onclick = () => {
+      if (useNativeMobileCamera) {
+        nativeCapture.click();
+      } else {
+        captureVideoFrame();
+      }
+    };
+
+    window.addEventListener("message", event => {
+      if (event.data && event.data.type === "streamlit:render") Streamlit.height();
+    });
+    window.addEventListener("beforeunload", stopCamera);
+    Streamlit.ready();
+    startCamera();
+  </script>
+</body>
+</html>

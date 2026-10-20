@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Signify — Signature verification, from image to insight.</title>
+  <desc id="desc">A dark navy and violet introduction to the Signify decision-support MVP, built with computer vision, PyTorch and Streamlit. Two abstract signature illustrations represent reference and query images.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1280" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15182B"/>
+      <stop offset="1" stop-color="#0B0E1B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(1034 116) rotate(141) scale(630 425)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#705CFF" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#705CFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="56" y1="85" x2="324" y2="167" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8D1FF"/>
+      <stop offset="1" stop-color="#A99AFF"/>
+    </linearGradient>
+    <linearGradient id="card" x1="726" y1="110" x2="1220" y2="350" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22233C"/>
+      <stop offset="1" stop-color="#171A2E"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#A89BEA" stroke-opacity=".045"/>
+    </pattern>
+    <clipPath id="bounds">
+      <rect width="1280" height="440" rx="24"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#bounds)">
+    <rect width="1280" height="440" fill="url(#background)"/>
+    <rect width="1280" height="440" fill="url(#glow)"/>
+    <rect width="1280" height="440" fill="url(#grid)"/>
+    <path d="M693 0L539 440" stroke="#C7BEFF" stroke-opacity=".06"/>
+    <path d="M837 0L683 440" stroke="#C7BEFF" stroke-opacity=".04"/>
+    <rect x=".5" y=".5" width="1279" height="439" rx="23.5" stroke="#363750"/>
+    <g font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif">
+      <rect x="56" y="40" width="32" height="32" rx="10" fill="#705CFF"/>
+      <path d="M65 60C62 55 69 47 76 48C84 50 66 64 65 62C64 60 79 56 81 61" stroke="#F6F3FF" stroke-width="2.1" stroke-linecap="round"/>
+      <text x="101" y="62" fill="#AFA6D2" font-size="14" font-weight="600" letter-spacing="2.8">IMAGE → INSIGHT</text>
+      <text x="54" y="155" fill="url(#accent)" font-size="76" font-weight="750" letter-spacing="-3">Signify</text>
+      <text x="58" y="208" fill="#F0EDFF" font-size="29" font-weight="500" letter-spacing="-.5">Signature verification,</text>
+      <text x="58" y="246" fill="#F0EDFF" font-size="29" font-weight="500" letter-spacing="-.5">from image to insight.</text>
+      <rect x="58" y="287" width="172" height="36" rx="18" fill="#705CFF" fill-opacity=".17" stroke="#705CFF" stroke-opacity=".5"/>
+      <text x="144" y="310" text-anchor="middle" fill="#D9D2FF" font-size="15" font-weight="600">Computer Vision</text>
+      <rect x="240" y="287" width="105" height="36" rx="18" fill="#1A1D31" stroke="#3C3C58"/>
+      <text x="292.5" y="310" text-anchor="middle" fill="#C9C6DC" font-size="15" font-weight="600">PyTorch</text>
+      <rect x="355" y="287" width="115" height="36" rx="18" fill="#1A1D31" stroke="#3C3C58"/>
+      <text x="412.5" y="310" text-anchor="middle" fill="#C9C6DC" font-size="15" font-weight="600">Streamlit</text>
+      <text x="58" y="390" fill="#9593B2" font-size="17">Compare</text>
+      <circle cx="144" cy="384" r="2" fill="#705CFF"/>
+      <text x="162" y="390" fill="#9593B2" font-size="17">Review</text>
+      <circle cx="235" cy="384" r="2" fill="#705CFF"/>
+      <text x="253" y="390" fill="#9593B2" font-size="17">Report</text>
+
+      <rect x="1010" y="42" width="214" height="32" rx="16" fill="#1F2037" stroke="#514A7F"/>
+      <circle cx="1028" cy="58" r="3.5" fill="#AB9BFF"/>
+      <text x="1041" y="63" fill="#D8D1F7" font-size="13" font-weight="600">Decision-support MVP</text>
+      <rect x="718" y="105" width="506" height="248" rx="20" fill="url(#card)" stroke="#45405E"/>
+      <text x="746" y="139" fill="#A7A1C5" font-size="12" font-weight="600" letter-spacing="1.7">REFERENCE IMAGE</text>
+      <text x="1001" y="139" fill="#A7A1C5" font-size="12" font-weight="600" letter-spacing="1.7">QUERY IMAGE</text>
+      <rect x="740" y="154" width="212" height="112" rx="12" fill="#F2EFFE"/>
+      <rect x="990" y="154" width="212" height="112" rx="12" fill="#F2EFFE"/>
+      <path d="M756 231H936M1006 231H1186" stroke="#B1A8CF" stroke-opacity=".35"/>
+      <path d="M758 218C773 206 808 176 812 189C819 210 775 238 783 216C791 195 820 188 813 208C809 221 811 222 820 206C836 179 827 226 841 215C847 209 848 196 851 200C853 205 849 218 857 216C867 212 867 199 871 204C879 223 893 200 899 207C904 214 920 210 932 203M777 232C821 228 880 226 926 227" stroke="#4E4381" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M1008 219C1024 208 1057 179 1063 191C1072 211 1026 236 1035 215C1043 197 1069 188 1065 208C1062 222 1063 223 1074 207C1088 183 1079 225 1094 215C1100 208 1100 198 1104 201C1107 207 1100 216 1110 216C1119 214 1119 201 1124 205C1132 223 1145 202 1152 209C1157 215 1174 212 1186 204M1029 232C1077 229 1127 227 1180 228" stroke="#705CFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="971" cy="210" r="16" fill="#705CFF"/>
+      <path d="M963 207H979M976 204L979 207L976 210M979 214H963M966 211L963 214L966 217" stroke="#F1EDFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="748" cy="300" r="4" fill="#AA99FF"/>
+      <text x="763" y="306" fill="#EAE5FC" font-size="18" font-weight="600">Reviewable comparisons</text>
+      <text x="746" y="333" fill="#A49DBE" font-size="14">Quality checks · Multiple reference signatures</text>
+      <text x="971" y="391" text-anchor="middle" fill="#8E88A9" font-size="13">Abstract signature illustrations</text>
+    </g>
+  </g>
+</svg>
